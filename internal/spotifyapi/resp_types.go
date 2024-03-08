@@ -42,12 +42,12 @@ type Playlist struct {
 	Public     bool   `json:"public"`
 	SnapshotID string `json:"snapshot_id"`
 	Tracks     struct {
-		Href     string `json:"href"`
-		Limit    int    `json:"limit"`
-		Next     string `json:"next"`
-		Offset   int    `json:"offset"`
-		Previous string `json:"previous"`
-		Total    int    `json:"total"`
+		Href     string  `json:"href"`
+		Limit    int     `json:"limit"`
+		Next     *string `json:"next"`
+		Offset   int     `json:"offset"`
+		Previous *string `json:"previous"`
+		Total    int     `json:"total"`
 		Items    []struct {
 			AddedAt string `json:"added_at"`
 			AddedBy struct {
@@ -238,19 +238,19 @@ type OriginalTrack struct {
 }
 
 type Track struct {
-    Title   string
-    Artist  string
-    Path    string
+	Title  string
+	Artist string
+	Path   string
 }
 
 func ConvertToNewTrackFormat(originalTrack OriginalTrack) Track {
-    var artists []string
-    for _, artist := range originalTrack.Artists {
-        artists = append(artists, artist.Name)
-    }
-    return Track{
-        Title:    originalTrack.Name,
-        Artist:   strings.Join(artists, ", "), // Joining artists into a single string
-        Path:     originalTrack.PreviewURL,
-    }
+	var artists []string
+	for _, artist := range originalTrack.Artists {
+		artists = append(artists, artist.Name)
+	}
+	return Track{
+		Title:  originalTrack.Name,
+		Artist: strings.Join(artists, ", "), // Joining artists into a single string
+		Path:   originalTrack.PreviewURL,
+	}
 }
