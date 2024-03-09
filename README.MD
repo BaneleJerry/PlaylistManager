@@ -1,5 +1,3 @@
-Certainly! Below is a template for a README.md file for your project. Feel free to customize it with specific details about your project.
-
 ```markdown
 # PlaylistManager
 
