@@ -15,15 +15,12 @@ import (
 func main() {
 
 	client := spotifyapi.NewClient()
-// https://open.spotify.com/playlist/37i9dQZF1DZ06evO30JqGN?si=e9aef6ff67b643ab
-	spotifyPlaylist, err := client.GetPlaylist("https://api.spotify.com/v1/playlists/37i9dQZF1DZ06evO30JqGN",)
+	// https://open.spotify.com/playlist/37i9dQZF1DZ06evO30JqGN?si=e9aef6ff67b643ab
+	// https://open.spotify.com/playlist/6uo85AkZ0mkn3rB5P7U6qy?si=e62ad3d74fd848f2
+	spotifyTracks, playlistname, err := client.GetSongs("https://api.spotify.com/v1/playlists/6uo85AkZ0mkn3rB5P7U6qy")
 	if err != nil {
 		log.Fatalf("Error getting track information: %v", err)
 	}
-
-	fmt.Println(spotifyPlaylist.Tracks.Limit)
-
-	spotifyTracks := extractTracksFromPlaylist(spotifyPlaylist)
 
 	directory := "testMusicFolder"
 	localTracks, err := readLocalMusicFiles(directory)
@@ -36,7 +33,7 @@ func main() {
 	uniqueTracks := make(map[string]bool)
 
 	for _, spspotifyTrack := range spotifyTracks {
-		trackID :=  spspotifyTrack.Title
+		trackID := spspotifyTrack.Title
 		if uniqueTracks[trackID] {
 			continue
 		}
@@ -50,31 +47,11 @@ func main() {
 		}
 	}
 
-	    
-
-	fmt.Println(spotifyPlaylist.Name)
-	err = playlistmanager.CreateM3U(playlistTracks, spotifyPlaylist.Name)
+	fmt.Println(playlistname)
+	err = playlistmanager.CreateM3U(playlistTracks, playlistname)
 	if err != nil {
 		log.Fatalf("Error creating M3U playlist: %v", err)
 	}
-}
-
-// extractTracksFromPlaylist extracts track information from Spotify playlist
-func extractTracksFromPlaylist(playlist spotifyapi.Playlist) []spotifyapi.Track {
-	var tracks []spotifyapi.Track
-	for _, item := range playlist.Tracks.Items {
-		var artists []string
-		for _, artist := range item.Track.Artists {
-			artists = append(artists, artist.Name)
-		}
-		
-		tracks = append(tracks, spotifyapi.Track{
-			Title:  item.Track.Name,
-			Artist: strings.Join(artists, "/"),
-			Path:   "",
-		})
-	}
-	return tracks
 }
 
 // readLocalMusicFiles reads local music files from the specified directory
@@ -117,7 +94,6 @@ func readLocalMusicFiles(directory string) ([]spotifyapi.Track, error) {
 			}
 
 			// Create Track object with full path and append to localTracks slice
-			fmt.Println(metadata.Artist())
 			localTracks = append(localTracks, spotifyapi.Track{
 				Title:  metadata.Title(),
 				Artist: metadata.Artist(),
