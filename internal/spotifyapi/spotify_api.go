@@ -15,10 +15,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const baseURL string = "https://api.spotify.com/v1"
 type Client struct {
 	http.Client
 	token tokenResp
 }
+
+
 
 func init() {
 	if err := godotenv.Load(); err != nil {

@@ -2,10 +2,12 @@ package spotifyapi
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
+
 )
 
 // GetTrackInfo retrieves information about a track from the Spotify API.
@@ -35,10 +37,12 @@ func (c *Client) GetTrackInfo(trackURL string) (OriginalTrack, error) {
 	return trackInfo, nil
 }
 
-// GetPlaylist retrieves information about a playlist from the Spotify API.
+
 func (c *Client) getPlaylist(playlistURL string) (Playlist, error) {
-	//  https://open.spotify.com/playlist/6uo85AkZ0mkn3rB5P7U6qy?si=a91710ed23ec467b
-	req, err := http.NewRequest("GET", playlistURL, nil)
+
+	PlaylistID := extractPlaylistID(playlistURL)
+	endpoint := baseURL + "/playlists/" + PlaylistID
+	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
 		return Playlist{}, err
 	}
@@ -92,29 +96,41 @@ func (c *Client) getNextPage(PlaylistURL string) (getPlaylistItemsRESP, error) {
 }
 
 func (c *Client) GetSongs(playlistURL string) ([]Track, string, error) {
-	var allTracks []Track
+    var allTracks []Track
 
-	// Initial request to fetch the first set of songs
-	playlist, err := c.getPlaylist(playlistURL)
-	if err != nil {
-		return nil, "", err
-	}
-	allTracks = append(allTracks, extractTracksFromPlaylist(&playlist)...)
-	playlistName := playlist.Name
-	// Fetch next sets of songs until there are no more
-	nextPage := *playlist.Tracks.Next
-	for nextPage != "" {
-		// Make request to fetch next set of songs
-		playlist, err := c.getNextPage(nextPage)
-		if err != nil {
-			return nil, "", err
-		}
-		allTracks = append(allTracks, extractTracksFromPlaylistRESP(&playlist)...)
-		nextPage = playlist.Next
-	}
+    playlist, err := c.getPlaylist(playlistURL)
+    if err != nil {
+        return nil, "", err
+    }
+    allTracks = append(allTracks, extractTracksFromPlaylist(&playlist)...)
+    playlistName := playlist.Name
 
-	return allTracks, playlistName, nil
+    // Check if playlist.Tracks is nil
+    if playlist.Tracks.Items == nil {
+        return nil, "", errors.New("tracks list is nil")
+    }
+
+    // Check if playlist.Tracks.Next is nil
+    if playlist.Tracks.Next == nil {
+        // No more pages to fetch, return the tracks and playlist name
+        return allTracks, playlistName, nil
+    }
+
+    // Fetch next sets of songs until there are no more
+    nextPage := *playlist.Tracks.Next
+    for nextPage != "" {
+        // Make request to fetch next set of songs
+        playlist, err := c.getNextPage(nextPage)
+        if err != nil {
+            return nil, "", err
+        }
+        allTracks = append(allTracks, extractTracksFromPlaylistRESP(&playlist)...)
+        nextPage = playlist.Next
+    }
+
+    return allTracks, playlistName, nil
 }
+
 
 func extractTracksFromPlaylist(playlist *Playlist) []Track {
 	var tracks []Track

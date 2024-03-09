@@ -49,7 +49,7 @@ func CreateM3U(tracks []spotifyapi.Track, playlistName string) error {
         }
     }
 
-    fmt.Printf("Playlist '%s' created successfully!\n", playlistName)
+    fmt.Printf("Playlist '%s' created successfully!\n\n", playlistName)
     return nil
 }
 
