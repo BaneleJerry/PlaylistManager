@@ -1,66 +1,20 @@
-```markdown
 # PlaylistManager
 
-PlaylistManager is a tool that seamlessly integrates Spotify playlists with your local music library, allowing you to create custom playlists effortlessly.
+PlaylistManager is a tool developed in Go that seamlessly integrates Spotify playlists with your local music library. It allows you to create custom playlists effortlessly by matching tracks from your Spotify playlists with those in your local music directory. 
 
-## Features
+## Description
 
-- **Track Extraction**: Utilizes the Spotify API to extract track information from your Spotify playlists.
-- **Local Music Library**: Scans your local music folder, identifying compatible music files.
-- **Matching Tracks**: Matches tracks from your Spotify playlist with those in your local library, ensuring a seamless blend of your favorite tunes.
-- **Playlist Creation**: Creates a new playlist file (M3U format) containing the matched tracks, ready for you to enjoy across your devices.
+This project aims to simplify the process of managing playlists by automating the task of creating custom playlists that combine tracks from both Spotify and your local music library. It utilizes the Spotify API to extract track information from your playlists and scans your local music folder to identify compatible music files. The tool then matches tracks from your Spotify playlists with those in your local library, ensuring a seamless blend of your favorite tunes. Finally, it creates a new playlist file (M3U format) containing the matched tracks, ready for you to enjoy across your devices.
 
 ## Future Development
 
-In the future, I envision expanding this tool into a full-fledged REPL (Read-Eval-Print Loop) environment. Currently, it's still in development, and I'm using it to learn Go programming language, adding new features, and improving its capabilities.
+In the future, I plan to expand this project into a full-fledged REPL (Read-Eval-Print Loop) environment, offering more dynamic functionality. Currently, it's still in development, and I'm using it to learn Go programming language, adding new features, and improving its capabilities.
 
 ## Getting Started
 
-### Prerequisites
-
-- Go installed on your machine
-- Access to Spotify API
-- Local music files in a directory
-
-### Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/BaneleJerry/PlaylistManager.git
-```
-
-2. Navigate to the project directory:
-
-```bash
-cd PlaylistManager
-```
-
-3. Build the project:
-
-```bash
-go build
-```
-
-4. Run the executable:
-
-```bash
-./PlaylistManager
-```
+To get started with PlaylistManager, make sure you have Go installed on your machine, access to the Spotify API, and local music files in a directory. Clone the repository, build the project, and run the executable.
 
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests to contribute to this project. Please make sure to follow the code of conduct.
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
-## Acknowledgments
-
-- [Spotify API](https://developer.spotify.com/documentation/web-api/)
-- [Go Documentation](https://golang.org/doc/)
-
-```
-
-Replace the placeholders with actual links, instructions, and details about your project. This README should give users a clear understanding of what your project does, how to use it, and how they can contribute.
