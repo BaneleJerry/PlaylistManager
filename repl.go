@@ -66,6 +66,7 @@ func getCommands() []cliCommand {
 		{1, "help", "Displays a help message", commandHelp},
 		{2, "exit", "Exit the Pokedex", commandExit},
 		{3, "Generate Playlist", "Generates playlists using provided link", generatePlaylist},
+		{4, "Download and generate Playlist", "Downloads and generates playlist from spotify using sportdl CLI",downloadPlaylist},
 
 	}
 }

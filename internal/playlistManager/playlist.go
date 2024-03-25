@@ -11,20 +11,20 @@ import (
 	"github.com/dhowden/tag"
 )
 
-func GeneratePlaylist(playlistUrl string) {
+func GeneratePlaylist(playlistUrl string) error {
 	client := spotifyapi.NewClient()
 	if client == nil {
-		log.Fatal("Client not assigned")
+		return fmt.Errorf("client not assigned")
 	}
 	spotifyTracks, playlistname, err := client.GetSongs(playlistUrl)
 	if err != nil {
-		log.Fatalf("Error getting track information: %v", err)
+		return fmt.Errorf("error getting track information: %v", err)
 	}
 
 	directory := "testMusicFolder"
 	localTracks, err := readLocalMusicFiles(directory)
 	if err != nil {
-		log.Fatalf("Error reading local music files: %v", err)
+		return fmt.Errorf("error reading local music files: %v", err)
 	}
 
 	var playlistTracks []spotifyapi.Track
@@ -49,8 +49,9 @@ func GeneratePlaylist(playlistUrl string) {
 	fmt.Println(playlistname)
 	err = CreateM3U(playlistTracks, playlistname)
 	if err != nil {
-		log.Fatalf("Error creating M3U playlist: %v", err)
+		return fmt.Errorf("error creating M3U playlist: %v", err)
 	}
+	return nil
 }
 
 func readLocalMusicFiles(directory string) ([]spotifyapi.Track, error) {
